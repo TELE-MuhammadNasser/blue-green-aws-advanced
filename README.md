@@ -1,3 +1,5 @@
+
+
 # Blue-Green Deployment on AWS — Advanced
 
 Zero-downtime deployment using ECS Fargate, ALB, CloudWatch, and Terraform.
@@ -42,3 +44,38 @@ Zero-downtime deployment using ECS Fargate, ALB, CloudWatch, and Terraform.
 ![Demo](docs/Screenshot%20from%202026-04-28%2019-07-52.png)
 
 ## Project Structure
+blue-green-aws-advanced/
+├── app/
+│   ├── app.js
+│   └── Dockerfile
+├── terraform/
+│   ├── provider.tf
+│   ├── variables.tf
+│   ├── backend.tf
+│   ├── vpc.tf
+│   ├── security.tf
+│   ├── ecr.tf
+│   ├── alb.tf
+│   ├── ecs.tf
+│   ├── cloudwatch.tf
+│   └── outputs.tf
+├── scripts/
+│   └── deploy.sh
+└── .github/
+└── workflows/
+└── deploy.yml
+## Quick Start
+
+```bash
+# Create S3 backend
+aws s3api create-bucket --bucket bg-advanced-tfstate --region eu-west-1 \
+  --create-bucket-configuration LocationConstraint=eu-west-1
+
+# Deploy infrastructure
+cd terraform
+terraform init
+terraform apply
+
+# Switch traffic to Green
+bash scripts/deploy.sh v2
+```
